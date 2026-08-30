@@ -58,6 +58,8 @@ const user = {
 // style 밖의 괄호는 JSX 안에서 자바스크립트를 쓰기 위한 괄호고 안쪽의 괄호는 자바스크립트 객체 ( {속성: 값} )
 // 만약에 const myStyle = {width: user.imageSize, height: user.imageSize} 이렇게 객체를 미리 선언해두면
 // <img style={myStyle} src={user.imageUrl} /> 이렇게도 가능
+// style 안에 쓰는 font-size 같은 하이폰(-)이 들어가는 경우 자바스크립트에서는 마이너스 의미이기 때문에
+// font-size가 아니라 fontSize 이렇게 카멜 케이스로 바꿔서 써야됨
 function Profile() {
   return (
     <>
