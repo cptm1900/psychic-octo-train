@@ -54,6 +54,7 @@ const user = {
 // 따옴표 대신에 중괄호를 사용하여 JSX 어트리뷰트에서 자바스크립트로 이스케이프 가능 (EL이나 템플릿처럼)
 // style{{}}는 특별한 문법이 아니라 style={} 안에 있는 {} 객체
 // 리액트의 style 속성은 HTML처럼 style="width: 90px;" 이런 문자열로 받는 게 아니라 자바스크립트 객체로 받음
+// 따라서 style="" 이런 식으로 쓰면 안 되고 무조건 style={} 이런 식으로 써야 됨
 // style 밖의 괄호는 JSX 안에서 자바스크립트를 쓰기 위한 괄호고 안쪽의 괄호는 자바스크립트 객체 ( {속성: 값} )
 // 만약에 const myStyle = {width: user.imageSize, height: user.imageSize} 이렇게 객체를 미리 선언해두면
 // <img style={myStyle} src={user.imageUrl} /> 이렇게도 가능
