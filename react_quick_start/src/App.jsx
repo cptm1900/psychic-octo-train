@@ -22,12 +22,14 @@ function App() {
       <ButtonState />
       <ManyState />
       <Share />
+      <TicTacToe />
     </div>
   );
 }
 
 // 리액트 css는 HTML의 class 대신에 className으로 함
-// (id도 사용이 가능하나 리액트 컴포넌트는 페이지 여러 곳에 재사용이 가능하므로 id 중복이 생길 수 있어서 안 씀)
+// (리액트는 자바스크립트 라이브러리인데 class는 자바스크립트에서 이미 예약어로 사용되고 있기 때문)
+// id도 사용이 가능하나 리액트 컴포넌트는 페이지 여러 곳에 재사용이 가능하므로 id 중복이 생길 수 있어서 안 씀
 // CSS 파일 추가는 기존에 하듯이 HTML(index.html)에 <link> 태그를 사용해서 추가
 function MyButton() {
   return (
@@ -58,6 +60,7 @@ const user = {
 // style 밖의 괄호는 JSX 안에서 자바스크립트를 쓰기 위한 괄호고 안쪽의 괄호는 자바스크립트 객체 ( {속성: 값} )
 // 만약에 const myStyle = {width: user.imageSize, height: user.imageSize} 이렇게 객체를 미리 선언해두면
 // <img style={myStyle} src={user.imageUrl} /> 이렇게도 가능
+// style 안에 숫자 값이 아니라 문자가 들어갈 경우 style={{width : '50px'}} 이렇게 따옴표로 감싸야됨
 // style 안에 쓰는 font-size 같은 하이폰(-)이 들어가는 경우 자바스크립트에서는 마이너스 의미이기 때문에
 // font-size가 아니라 fontSize 이렇게 카멜 케이스로 바꿔서 써야됨
 function Profile() {
@@ -172,6 +175,10 @@ function ButtonState() {
 
 // 같은 컴포넌트를 여러 번 렌더링하면 각각의 컴포넌트는 고유한 State를 얻게 됨
 // 다음과 같은 경우 각 버튼이 고유한 count State를 기억하고 다른 버튼에 영향을 주지 않음
+// ManyState() 안에 ButtonState()를 넣으면 안 됨
+// 리액트에 "컴포넌트를 함수 안에 중첩해서 정의하지 말라"는 규칙이 있음
+// 매 렌더링마다 새 함수가 만들어지면서 state가 계속 초기화되는 문제가 생기기 때문
+// (useState의 setCount로 상태값을 변화시키면 부모 함수까지 다시 렌더링하기 때문에 count가 계속 0으로 초기화 됨)
 function ManyState() {
   return (
     <>
@@ -213,6 +220,70 @@ function ShareButton({ count, onClick} ) {
     <button onClick={onClick}>
       Clicked {count} times
     </button>
+  );
+}
+
+// Tic-Tac-Toe
+let indexArr = [0,1,2,3,4,5,6,7,8];
+function TicTacToe() {
+  const [player, setPlayer] = useState('X');
+  
+  return (
+    <>
+      <h1 style={{textAlign: 'center'}}>&lt; Tic Tac Toe &gt;</h1>
+      <div className = 'tictactoe_div'>
+        <div className = 'tictactoe_div_left_box'>
+          <table className='tictactoe_table'>
+            <tbody>
+              <tr>
+                <Square player={player} setPlayer={setPlayer} indexArr={indexArr} index={0} />
+                <Square player={player} setPlayer={setPlayer} indexArr={indexArr} index={1} />
+                <Square player={player} setPlayer={setPlayer} indexArr={indexArr} index={2} />
+              </tr>
+              <tr>
+                <Square player={player} setPlayer={setPlayer} indexArr={indexArr} index={3} />
+                <Square player={player} setPlayer={setPlayer} indexArr={indexArr} index={4} />
+                <Square player={player} setPlayer={setPlayer} indexArr={indexArr} index={5} />
+              </tr>
+              <tr>
+                <Square player={player} setPlayer={setPlayer} indexArr={indexArr} index={6} />
+                <Square player={player} setPlayer={setPlayer} indexArr={indexArr} index={7} />
+                <Square player={player} setPlayer={setPlayer} indexArr={indexArr} index={8} />
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div className = 'tictactoe_div_right_box'>
+          <span>Next player : {player}</span>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function Square({player, setPlayer, indexArr, index}) {
+  const [mark, setMark] = useState(null);
+  
+  function nextTurn() {
+    if(mark == null) {
+      setPlayer(player == 'X' ? 'O' : 'X');
+      setMark(player);
+      indexArr[index] = player;
+    }
+    if((indexArr[0] == indexArr[1] && indexArr[1] == indexArr[2])
+      || (indexArr[3] == indexArr[4] && indexArr[4] == indexArr[5])
+      || (indexArr[6] == indexArr[7] && indexArr[7] == indexArr[8])
+      || (indexArr[0] == indexArr[3] && indexArr[3] == indexArr[6])
+      || (indexArr[1] == indexArr[4] && indexArr[4] == indexArr[7])
+      || (indexArr[2] == indexArr[5] && indexArr[5] == indexArr[8])
+      || (indexArr[0] == indexArr[4] && indexArr[4] == indexArr[8])
+      || (indexArr[2] == indexArr[4] && indexArr[4] == indexArr[6])) {
+        alert('Player "' + player + '" is win!');
+    }
+  }
+
+  return (
+    <td onClick={nextTurn}>{mark}</td>
   );
 }
 
