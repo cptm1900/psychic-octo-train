@@ -22,6 +22,7 @@ function App() {
       <ButtonState />
       <ManyState />
       <Share />
+      <TicTacToe_Early_Version />
       <TicTacToe />
     </div>
   );
@@ -225,12 +226,12 @@ function ShareButton({ count, onClick} ) {
 
 // Tic-Tac-Toe
 let indexArr = [0,1,2,3,4,5,6,7,8];
-function TicTacToe() {
+function TicTacToe_Early_Version() {
   const [player, setPlayer] = useState('X');
   
   return (
     <>
-      <h1 style={{textAlign: 'center'}}>&lt; Tic Tac Toe &gt;</h1>
+      <h1 style={{textAlign: 'center'}}>&lt; Tic Tac Toe _ Early version &gt;</h1>
       <div className = 'tictactoe_div'>
         <div className = 'tictactoe_div_left_box'>
           <table className='tictactoe_table'>
@@ -260,7 +261,6 @@ function TicTacToe() {
     </>
   );
 }
-
 function Square({player, setPlayer, indexArr, index}) {
   const [mark, setMark] = useState(null);
   
@@ -284,6 +284,117 @@ function Square({player, setPlayer, indexArr, index}) {
 
   return (
     <td onClick={nextTurn}>{mark}</td>
+  );
+}
+
+/*
+
+  틱택토 만들면서 생긴 문제들과 해결 방법
+
+  1. 렌더링 중복
+  리액트의 기본 원칙은 컴포넌트 안에 또다른 컴포넌트를 넣지 않는 것
+  틱택토 만들면서 겪었던 렌더링 문제들이 전부 컴포넌트 안에 또다른 컴포넌트를 넣어서 생긴 일
+  다른 컴포넌트에 파라미터가 필요하면 Prop로 보내면 되고 onClick처럼 공용 변수를 쓰는 로직 함수는 넣어도 됨
+
+  2. 기본 개념
+  처음에 값을 표현하고 그걸 배열에 넣으려고 했었음 => 일반적인 프로그래밍 직관
+  리액트의 핵심 철학 : UI는 상태(State)의 함수다. => 데이터(State)가 먼저고 화면은 State를 비추는 거울
+  X => 클릭했으니까 이 칸에 X를 표시하자, 그리고 그걸 기록해두자
+  O => 클릭했으니까 데이터(배열)를 먼저 바꾸자. 화면은 그 데이터가 바뀌면 리액트가 알아서 다시 그려준다
+
+*/
+function TicTacToe() {
+  const [marks, setMarks] = useState(Array(9).fill(null));
+  const [nextPlayer, setNextPlayer] = useState('X');
+  const [state, setState] = useState('Next Player : ' + nextPlayer);
+
+  function onClickSquare(index) {
+    if(marks[index] || calculateWinner(marks)) {
+      return;
+    }
+
+    const nextMarks = marks.slice();
+    nextMarks[index] = nextPlayer;
+    setMarks(nextMarks);
+
+    if(calculateWinner(nextMarks)) {
+      setState('Winner : ' + nextPlayer);
+      return;
+    }
+    else {
+      setState('Next Player : ' + nextPlayer);
+    }
+
+    nextPlayer == 'O' ? setNextPlayer('X') : setNextPlayer('O');
+  }
+
+  function calculateWinner(nextMarks) {
+    const lines = [
+      [0,1,2],
+      [3,4,5],
+      [6,7,8],
+      [0,3,6],
+      [1,4,7],
+      [2,5,8],
+      [0,4,8],
+      [2,4,6]
+    ];
+
+    for(let i=0; i<lines.length; i++) {
+      const [a,b,c] = lines[i];
+      if(nextMarks[a] && nextMarks[a] === nextMarks[b] && nextMarks[b] === nextMarks[c]) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  return (
+    <>
+    <h1 style={{textAlign: 'center'}}>&lt; Tic Tac Toe &gt;</h1>
+    <div className = 'tictactoe_div'>
+      <table className='tictactoe_table'>
+        <tbody>
+          <DrawBoard onClickSquare={onClickSquare} marks={marks} />
+        </tbody>
+      </table>
+      <span style={{marginLeft: '50px'}}>{state}</span>
+    </div>
+    </>
+  );
+}
+
+function DrawBoard({onClickSquare, marks}) {
+  const rows = [0,1,2];
+  // Array()로 배열을 생성하고 keys()로 각 요소의 인덱스를 뽑아낸 이터레이터 객체를 반환 (map, filter 같은 함수는 못 쓰고 순서대로 뽑아내는 것만 가능)
+  // ...은 스프레드 연산자로서 내용물을 펼쳐서 꺼냄
+  const cols = [...Array(3).keys()];
+
+  return (
+    <>
+      {
+        rows.map(row=>{
+          return (<tr key={row}>
+            {
+              cols.map(col=>{
+                const index = col + row*rows.length;
+                return (
+                  <HandleSquare onClickSquare={onClickSquare} key={index} index={index} mark={marks[index]} />
+                );
+              })
+            }
+          </tr>
+          );
+        })
+      }
+    </>
+  );
+}
+
+function HandleSquare({index, mark, onClickSquare}) {
+  return (
+    <td onClick={()=>{onClickSquare(index)}}>{mark}</td>
   );
 }
 
