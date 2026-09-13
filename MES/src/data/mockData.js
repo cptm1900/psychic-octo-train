@@ -72,47 +72,75 @@ export const lines = [
   },
 ]
 
-/** 최근 7일 라인별 생산 실적 (목표 대비 완료수량) */
-export const dailyTrend = {
-  L1: [
-    { day: '', target: 120, done: 118 },
-    { day: '', target: 120, done: 124 },
-    { day: '', target: 120, done: 103 },
-    { day: '', target: 120, done: 121 },
-    { day: '', target: 120, done: 112 },
-    { day: '', target: 120, done: 126 },
-    { day: '', target: 120, done: 96 },
+/**
+ * 전체 라인 합산 물량 추이 — [목표, 실적].
+ * 목표는 구간마다 따로 잡히므로(가동일수 · 셋업 계획) 점별로 보관한다.
+ * 각 배열의 마지막 구간은 아직 진행 중이라 실적이 낮다.
+ */
+const RAW_TREND = {
+  daily: [
+    [2220, 2180],
+    [2220, 2310],
+    [2220, 2050],
+    [2400, 2460],
+    [2400, 2280],
+    [2100, 2170],
+    [2220, 1243],
   ],
-  L2: [
-    { day: '', target: 1800, done: 1760 },
-    { day: '', target: 1800, done: 1648 },
-    { day: '', target: 1800, done: 1825 },
-    { day: '', target: 1800, done: 1902 },
-    { day: '', target: 1800, done: 1410 },
-    { day: '', target: 1800, done: 1788 },
-    { day: '', target: 1800, done: 1105 },
+  weekly: [
+    [11100, 10820],
+    [11100, 11240],
+    [12000, 11380],
+    [12000, 12180],
+    [11500, 10960],
+    [12500, 12740],
+    [13200, 12910],
+    [13200, 9130],
   ],
-  L3: [
-    { day: '', target: 300, done: 296 },
-    { day: '', target: 300, done: 312 },
-    { day: '', target: 300, done: 245 },
-    { day: '', target: 300, done: 288 },
-    { day: '', target: 300, done: 160 },
-    { day: '', target: 300, done: 301 },
-    { day: '', target: 300, done: 42 },
+  monthly: [
+    [46000, 45120],
+    [46000, 47030],
+    [48000, 46180],
+    [48000, 49210],
+    [47000, 44870],
+    [49000, 50120],
+    [49000, 48640],
+    [50000, 51380],
+    [50000, 47960],
+    [52000, 52840],
+    [52000, 50110],
+    [52000, 33420],
   ],
 }
 
-/** 일자 라벨도 오늘이 마지막 날이 되도록 맞춘다. */
+/** 라벨은 마지막 구간이 오늘(이번 주 · 이번 달)이 되도록 맞춘다. */
 const dayLabel = (daysAgo) => {
   const d = new Date(Date.now() - daysAgo * 86_400_000)
   return `${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
 }
-Object.values(dailyTrend).forEach((series) => {
-  series.forEach((point, i) => {
-    point.day = dayLabel(series.length - 1 - i)
-  })
-})
+
+/** 해당 주의 월요일 날짜 */
+const weekLabel = (weeksAgo) => {
+  const d = new Date(Date.now() - weeksAgo * 7 * 86_400_000)
+  d.setDate(d.getDate() - ((d.getDay() + 6) % 7))
+  return `${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
+}
+
+const monthLabel = (monthsAgo) => {
+  const d = new Date()
+  d.setDate(1)
+  d.setMonth(d.getMonth() - monthsAgo)
+  return `${d.getMonth() + 1}월`
+}
+
+const toSeries = (rows, label) =>
+  rows.map(([target, done], i) => ({ label: label(rows.length - 1 - i), target, done }))
+
+export const totalTrend = {
+  daily: toSeries(RAW_TREND.daily, dayLabel),
+  weekly: toSeries(RAW_TREND.weekly, weekLabel),
+  monthly: toSeries(RAW_TREND.monthly, monthLabel),
+}
 
 export const LOT_STATUS = {
   run: { label: '진행', tone: 'info' },

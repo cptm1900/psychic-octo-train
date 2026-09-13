@@ -1,24 +1,40 @@
+import { Line } from 'react-chartjs-2'
 import './SummaryBar.css'
+import { palette } from '../charts/chartSetup'
 import { fmtInt, fmtPct } from '../utils/format'
 
-/** 12포인트 스파크라인 — 배경 추이용, 값은 타일의 숫자가 말한다. */
-function Sparkline({ points, width = 96, height = 28 }) {
+/** 스파크라인 — 축 없이 추세만 보여주고, 값은 타일의 숫자가 말한다. */
+function Sparkline({ points }) {
   if (!points?.length) return null
-  const min = Math.min(...points)
-  const max = Math.max(...points)
-  const span = max - min || 1
-  const step = width / (points.length - 1)
-  const d = points
-    .map((p, i) => `${i === 0 ? 'M' : 'L'}${(i * step).toFixed(1)},${(height - ((p - min) / span) * (height - 4) - 2).toFixed(1)}`)
-    .join(' ')
+
   const last = points.length - 1
-  const lx = last * step
-  const ly = height - ((points[last] - min) / span) * (height - 4) - 2
+  const data = {
+    labels: points.map((_, i) => i),
+    datasets: [
+      {
+        data: points,
+        borderColor: palette.trackStrong(),
+        borderWidth: 2,
+        tension: 0.35,
+        pointRadius: (ctx) => (ctx.dataIndex === last ? 3.5 : 0),
+        pointBackgroundColor: palette.brand(),
+        pointBorderWidth: 0,
+      },
+    ],
+  }
+
+  const options = {
+    responsive: true,
+    events: [],
+    layout: { padding: 4 },
+    scales: { x: { display: false }, y: { display: false } },
+    plugins: { legend: { display: false }, tooltip: { enabled: false } },
+  }
+
   return (
-    <svg className="spark" width={width} height={height} viewBox={`0 0 ${width} ${height}`} aria-hidden="true">
-      <path d={d} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      <circle cx={lx} cy={ly} r="4" className="spark__dot" />
-    </svg>
+    <div className="spark" aria-hidden="true">
+      <Line data={data} options={options} />
+    </div>
   )
 }
 

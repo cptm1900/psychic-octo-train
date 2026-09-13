@@ -12,22 +12,31 @@
 
 .brand {
   display: flex;
-  flex-direction: column;
-  gap: 3px;
+  align-items: center;
   min-width: 0;
 }
+/* 로고 자체가 메인 화면으로 가는 버튼이다. */
+.brand--link {
+  padding: 4px 8px;
+  margin-left: -8px;
+  border: 0;
+  border-radius: var(--r-md);
+  background: transparent;
+  text-align: left;
+  transition: background 0.15s ease;
+}
+.brand--link:hover {
+  background: var(--surface-2);
+}
+.brand--link:active {
+  background: var(--surface-3);
+}
+
 .brand__logo {
-  height: 34px;
+  height: 42px;
   width: auto;
   object-fit: contain;
   object-position: left center;
-}
-.brand__tagline {
-  font-size: 10.5px;
-  color: var(--text-3);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .topbar__center {
@@ -50,6 +59,11 @@
   flex-direction: column;
   align-items: flex-end;
   line-height: 1.2;
+}
+.topbar__worker {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-1);
 }
 .clock__date {
   font-size: 12px;

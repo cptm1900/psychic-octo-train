@@ -1,0 +1,123 @@
+.home {
+    min-height: 100vh;
+    padding: 40px 20px;
+    color: #0b1524;
+    font-family: 'Malgun Gothic', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.home_head {
+    text-align: center;
+}
+
+.home_logo {
+    height: 52px;
+}
+
+.home_title {
+    margin: 14px 0 0 0;
+    font-size: 34px;
+    font-weight: 800;
+}
+
+.home_sub {
+    margin: 6px 0 0 0;
+    font-size: 15px;
+    color: #4d5a6e;
+}
+
+.home_menu {
+    display: flex;
+    gap: 22px;
+    width: 100%;
+    max-width: 900px;
+    margin-top: 100px;
+}
+
+.hcard {
+    flex: 1;
+    min-height: 300px;
+    padding: 32px 26px;
+    background: #fff;
+    border: 1px solid #e4e8f1;
+    border-radius: 16px;
+    box-shadow: 0 6px 18px -8px rgba(15, 30, 60, 0.18);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    text-align: center;
+    transition: transform 0.12s, box-shadow 0.18s, border-color 0.18s;
+}
+
+.hcard:hover {
+    transform: translateY(-3px);
+    border-color: #006cb8;
+    box-shadow: 0 18px 34px -18px rgba(15, 30, 60, 0.35);
+}
+
+.hcard_icon {
+    width: 74px;
+    height: 74px;
+    margin-bottom: 12px;
+    border-radius: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin_icon {
+    background: rgba(0, 108, 184, 0.1);
+    color: #006cb8;
+}
+
+.worker_icon {
+    background: rgba(12, 163, 12, 0.12);
+    color: #06750a;
+}
+
+.hcard_title {
+    font-size: 30px;
+    font-weight: 800;
+}
+
+.hcard_desc {
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.admin_desc {
+    color: #006cb8;
+}
+
+.worker_desc {
+    color: #06750a;
+}
+
+.hcard_detail {
+    margin-top: 8px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #8794a8;
+}
+
+.home_foot {
+    font-size: 12px;
+    color: #8794a8;
+}
+
+@media (max-width: 760px) {
+    .home_menu {
+        flex-direction: column;
+    }
+    .hcard {
+        min-height: 200px;
+    }
+    .hcard_title {
+        font-size: 24px;
+    }
+}

@@ -129,35 +129,12 @@
   margin-left: 3px;
 }
 
-/* ---------- 링 게이지 ---------- */
+/* ---------- 링 게이지 (Chart.js 도넛 + 가운데 수치) ---------- */
 .ring {
   position: relative;
   flex: none;
   display: grid;
   place-items: center;
-}
-.ring svg {
-  transform: rotate(-90deg);
-}
-.ring__track {
-  stroke: var(--track);
-}
-.ring__fill {
-  stroke: var(--brand);
-  stroke-linecap: round;
-  transition: stroke-dashoffset 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.ring--warning .ring__fill {
-  stroke: var(--warning);
-}
-.ring--warning .ring__track {
-  stroke: var(--warning-soft);
-}
-.ring--critical .ring__fill {
-  stroke: var(--critical);
-}
-.ring--critical .ring__track {
-  stroke: var(--critical-soft);
 }
 .ring__center {
   position: absolute;

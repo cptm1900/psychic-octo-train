@@ -61,11 +61,10 @@
 }
 
 .spark {
+  position: relative;
   flex: none;
-  color: var(--track);
-}
-.spark__dot {
-  fill: var(--brand);
+  width: 96px;
+  height: 32px;
 }
 
 @media (max-width: 1200px) {

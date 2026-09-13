@@ -1,0 +1,41 @@
+.wlog__list {
+  margin: 0;
+  padding: 0 18px 14px;
+  list-style: none;
+  display: grid;
+  align-content: start;
+  gap: 2px;
+  max-height: 240px;
+}
+
+.wlog__row {
+  display: grid;
+  grid-template-columns: 64px auto minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--border);
+}
+.wlog__row:last-child {
+  border-bottom: 0;
+}
+
+.wlog__time {
+  font-size: 12px;
+  color: var(--text-3);
+}
+
+.wlog__text {
+  font-size: 13px;
+  color: var(--text-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wlog__empty {
+  padding: 18px 0;
+  font-size: 13px;
+  color: var(--text-3);
+  text-align: center;
+}

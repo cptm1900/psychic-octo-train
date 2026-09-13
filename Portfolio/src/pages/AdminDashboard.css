@@ -1,0 +1,724 @@
+.dash_background {
+    background-color: #eef1f7;
+}
+
+.dash {
+    max-width: 1920px;
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: 16px;
+    background: #eef1f7;
+    color: #0b1524;
+    font-family: 'Malgun Gothic', sans-serif;
+}
+
+.dash_head {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    background: #fff;
+    border: 1px solid #e4e8f1;
+    border-radius: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 6px 18px -8px rgba(15, 30, 60, 0.18), 0 1px 2px rgba(15, 30, 60, 0.05);
+}
+
+.dash_logo_wrap {
+    flex: 1;
+}
+
+.logo_btn {
+    padding: 4px 8px;
+    margin-left: -8px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+.logo_btn:hover {
+    background: #f6f8fc;
+}
+.logo_btn:active {
+    background: #eef2f8;
+}
+
+.dash_head_center {
+    text-align: center;
+}
+
+.dash_title {
+    font-size: 24px;
+    font-weight: 800;
+    margin: 0;
+}
+
+.dash_subtitle {
+    margin: 4px 0 0 0;
+    font-size: 13px;
+    color: #8794a8;
+}
+
+.dash_time {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    line-height: 1.2;
+}
+
+.dash_date {
+    font-size: 12px;
+    color: #8794a8;
+}
+
+.dash_clock {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.summary {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.tile {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px 16px;
+    background: #fff;
+    border: 1px solid #e4e8f1;
+    border-radius: 10px;
+    box-shadow: 0 1px 2px rgba(15, 30, 60, 0.06);
+    min-width: 0;
+}
+
+.tile_body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.tile_label {
+    font-size: 12px;
+    color: #8794a8;
+    white-space: nowrap;
+}
+
+.tile_value {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    font-variant-numeric: tabular-nums;
+}
+
+.tile_value small {
+    font-size: 11px;
+    font-weight: 600;
+    color: #8794a8;
+    margin-left: 4px;
+}
+
+.tile_delta {
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.tile_delta.good {
+    color: #06750a;
+}
+
+.tile_delta.bad {
+    color: #b32d2d;
+}
+
+.tile_delta.day_over_day {
+    color: #8794a8;
+    font-weight: 300;
+}
+
+.spark {
+    position: relative;
+    flex: none;
+    width: 96px;
+    height: 32px;
+}
+
+.lines {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.line_card {
+    flex: 1;
+    min-width: 0;
+    padding: 18px 20px;
+    background: #fff;
+    border: 1px solid #e4e8f1;
+    border-radius: 16px;
+    box-shadow: 0 6px 18px -8px rgba(15, 30, 60, 0.18);
+}
+
+.line_head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 18px;
+}
+
+.line_name {
+    font-size: 20px;
+    font-weight: 800;
+    margin: 0;
+}
+
+.line_kind {
+    margin-left: 8px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: #eef2f8;
+    font-size: 11px;
+    font-weight: 700;
+    color: #4d5a6e;
+    vertical-align: middle;
+}
+
+.line_process {
+    margin: 4px 0 0 0;
+    font-size: 12px;
+    color: #8794a8;
+}
+
+.chip {
+    flex: none;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.chip.run {
+    background: #e3f5e3;
+    color: #06750a;
+}
+
+.chip.ready {
+    background: #fdf3dd;
+    color: #8a6000;
+}
+
+.meter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.meter_label {
+    flex: none;
+    width: 60px;
+    font-size: 12px;
+    color: #4d5a6e;
+}
+
+.meter_bar {
+    flex: 1;
+    height: 8px;
+    background: #eef2f8;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.meter_fill {
+    height: 100%;
+    background: #006cb8;
+    border-radius: 4px;
+}
+
+.meter_fill.defect {
+    background: #d03b3b;
+}
+
+.meter_fill.muted {
+    background: #cfd6e2;
+}
+
+.meter_value {
+    flex: none;
+    width: 80px;
+    text-align: right;
+    font-size: 13px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+.meter_value small {
+    font-size: 11px;
+    font-weight: 500;
+    color: #8794a8;
+}
+
+.line_foot {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid #eef2f8;
+    display: flex;
+    gap: 20px;
+}
+
+.line_foot_item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.line_foot_label {
+    font-size: 11px;
+    color: #8794a8;
+}
+
+.line_foot_value {
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.line_foot_spec {
+    font-size: 11px;
+    color: #8794a8;
+}
+
+.line_body {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.line_gauge {
+    flex: none;
+}
+
+.line_meters {
+    flex: 1;
+    min-width: 0;
+}
+
+.ring {
+    position: relative;
+    width: 110px;
+    height: 110px;
+}
+
+.ring_center {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.ring_value {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+}
+
+.ring_caption {
+    font-size: 10px;
+    color: #8794a8;
+}
+
+.lot_card {
+    padding: 18px 20px;
+    background: #fff;
+    border: 1px solid #e4e8f1;
+    border-radius: 16px;
+    box-shadow: 0 6px 18px -8px rgba(15, 30, 60, 0.18);
+    margin-bottom: 16px;
+}
+
+.lot_head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.card_title {
+    font-size: 17px;
+    font-weight: 800;
+    margin: 0;
+}
+
+.card_sub {
+    margin: 2px 0 0 0;
+    font-size: 12px;
+    color: #8794a8;
+}
+
+.lot_tools {
+    display: flex;
+    gap: 10px;
+}
+
+.seg {
+    display: flex;
+    padding: 3px;
+    background: #eef2f8;
+    border-radius: 8px;
+}
+
+.seg_btn {
+    padding: 5px 14px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    font-size: 12px;
+    font-weight: 600;
+    color: #4d5a6e;
+    cursor: pointer;
+}
+
+.seg_btn.on {
+    background: #fff;
+    color: #006cb8;
+    box-shadow: 0 1px 2px rgba(15, 30, 60, 0.1);
+}
+
+.lot_search {
+    width: 200px;
+    padding: 6px 12px;
+    border: 1px solid #e4e8f1;
+    border-radius: 8px;
+    font-size: 12px;
+    outline: none;
+}
+
+.lot_search:focus {
+    border-color: #006cb8;
+}
+
+.lot_table_wrap {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.lot_table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.lot_table th {
+    padding: 10px 8px;
+    border-bottom: 1px solid #e4e8f1;
+    font-size: 12px;
+    font-weight: 600;
+    color: #8794a8;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.lot_table td {
+    padding: 10px 8px;
+    border-bottom: 1px solid #f2f4f8;
+    vertical-align: middle;
+}
+
+.lot_table .c {
+    text-align: center;
+}
+
+.lot_table .r {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.lot_table .strong {
+    font-weight: 700;
+}
+
+.lot_table .sub {
+    font-size: 11px;
+    color: #8794a8;
+}
+
+.lot_table .bad {
+    color: #d03b3b;
+    font-weight: 700;
+}
+
+.rate_wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.rate_bar {
+    flex: 1;
+    height: 6px;
+    background: #eef2f8;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.rate_fill {
+    height: 100%;
+    background: #006cb8;
+}
+
+.rate_text {
+    flex: none;
+    width: 36px;
+    text-align: right;
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+}
+
+.lot_chip {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.lot_chip.run {
+    background: #e5f0f8;
+    color: #006cb8;
+}
+
+.lot_chip.setup {
+    background: #fdf3dd;
+    color: #8a6000;
+}
+
+.lot_chip.hold {
+    background: #fde8e8;
+    color: #b32d2d;
+}
+
+.lot_chip.done {
+    background: #e3f5e3;
+    color: #06750a;
+}
+
+.dash_bottom {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.lot_card {
+    flex: 2;
+    min-width: 0;
+    margin-bottom: 0;
+}
+
+.side {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.panel {
+    flex: 1;
+    padding: 18px 20px;
+    background: #fff;
+    border: 1px solid #e4e8f1;
+    border-radius: 16px;
+    box-shadow: 0 6px 18px -8px rgba(15, 30, 60, 0.18);
+}
+
+.equip_table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-size: 12px;
+}
+
+.equip_table th {
+    padding: 8px 4px;
+    border-bottom: 1px solid #e4e8f1;
+    font-size: 11px;
+    font-weight: 600;
+    color: #8794a8;
+    text-align: center;
+}
+
+.equip_table th:first-child {
+    text-align: left;
+}
+
+.equip_table td {
+    padding: 8px 4px;
+    border-bottom: 1px solid #f2f4f8;
+}
+
+.equip_table .c {
+    text-align: center;
+}
+
+.equip_code {
+    display: inline-block;
+    width: 34px;
+    padding: 2px 0;
+    margin-right: 8px;
+    border-radius: 4px;
+    background: #eef2f8;
+    font-size: 10px;
+    font-weight: 700;
+    color: #4d5a6e;
+    text-align: center;
+}
+
+.equip_name {
+    font-size: 12px;
+}
+
+.dot {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.dot.ok {
+    background: #e3f5e3;
+    color: #06750a;
+}
+
+.dot.check {
+    background: #fdf3dd;
+    color: #8a6000;
+}
+
+.dot.stop {
+    background: #fde8e8;
+    color: #b32d2d;
+}
+
+.dot.idle {
+    background: #f2f4f8;
+    color: #8794a8;
+}
+
+.defect_list {
+    margin-top: 12px;
+}
+
+.defect_row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.defect_name {
+    flex: none;
+    width: 100px;
+    font-size: 12px;
+    color: #4d5a6e;
+}
+
+.defect_bar {
+    flex: 1;
+    height: 14px;
+    background: #eef2f8;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.defect_fill {
+    height: 100%;
+    background: #006cb8;
+}
+
+.defect_count {
+    flex: none;
+    width: 26px;
+    text-align: right;
+    font-size: 12px;
+    font-weight: 700;
+    /* 모든 숫자를 같은 폭으로 그림 (대부분의 폰트에서 숫자는 글자마자 폭이 달라서 이거 없으면 레이아웃 움직임) */
+    font-variant-numeric: tabular-nums;
+}
+
+.defect_pct {
+    flex: none;
+    width: 34px;
+    text-align: right;
+    font-size: 11px;
+    color: #8794a8;
+}
+
+.trends {
+    display: flex;
+    gap: 16px;
+}
+
+.trend {
+    flex: 1;
+    min-width: 0;
+    padding: 18px 20px;
+    background: #fff;
+    border: 1px solid #e4e8f1;
+    border-radius: 16px;
+    box-shadow: 0 6px 18px -8px rgba(15, 30, 60, 0.18);
+}
+
+.trend_head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.trend_legend {
+    display: flex;
+    gap: 10px;
+    font-size: 11px;
+    color: #8794a8;
+}
+
+.lg::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin-right: 4px;
+    border-radius: 2px;
+    vertical-align: middle;
+}
+
+.lg.good::before {
+    background: #0ca30c;
+}
+
+.lg.warn::before {
+    background: #fab219;
+}
+
+.trend_body {
+    position: relative;
+    height: 180px;
+}
