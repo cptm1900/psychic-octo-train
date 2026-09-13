@@ -87,39 +87,39 @@ function AdminDashboard() {
                 <div className="lines">
                     <LineCard
                         name="Line 1"
-                        kind="냉각형 MWIR"
-                        process="In 범프 플립칩 본딩 · 디워 진공 실링"
+                        kind="냉각형"
+                        process="조립"
                         status="가동중"
                         produced={120}
                         target={120}
                         defect={7}
-                        lotId="SMSL-2609-014"
-                        product="Super MARKOS SL"
-                        spec="T2SL MWIR · 1280×1024 · 10㎛"
+                        lotId="SMKS-2609-014"
+                        product="Super MARKOS"
+                        spec="T2SL MW 1280×1024 (10㎛)"
                     />
                     <LineCard
                         name="Line 2"
-                        kind="비냉각형 LWIR"
-                        process="웨이퍼 레벨 진공 패키징 · 코어 조립"
+                        kind="냉각형"
+                        process="포장"
                         status="가동중"
                         produced={1144}
                         target={1800}
                         defect={45}
-                        lotId="TEQ2-2609-131"
-                        product="TE-EQ2 코어"
-                        spec="μ-Bolometer LWIR · 640×480 · 12㎛"
+                        lotId="LKS-2609-131"
+                        product="LUKAS"
+                        spec="T2SL LW 640×512 (15㎛)"
                     />
                     <LineCard
                         name="Line 3"
-                        kind="InGaAs SWIR"
-                        process="블랙바디 NUC 캘리브레이션 · 결함화소 검사"
+                        kind="비냉각형"
+                        process="FT"
                         status="준비중"
                         produced={42}
                         target={300}
                         defect={2}
-                        lotId="IGA1280-2609-007"
-                        product="InGaAs 1280"
-                        spec="InGaAs SWIR · 1280×1024 · 10㎛"
+                        lotId="TEQ1-2609-007"
+                        product="TE-EQ1"
+                        spec="비냉각형 검출기"
                     />
                 </div>
 
@@ -237,12 +237,12 @@ function AdminDashboard() {
                             <div className="defect_list">
                                 {defects.map((d) => (
                                     <div className="defect_row" key={d.name}>
-                                    <span className="defect_name">{d.name}</span>
-                                    <div className="defect_bar">
-                                        <div className="defect_fill" style={{ width: `${d.count}%` }}></div>
-                                    </div>
-                                    <span className="defect_count">{d.count}</span>
-                                    <span className="defect_pct">{d.count}%</span>
+                                        <span className="defect_name">{d.name}</span>
+                                        <div className="defect_bar">
+                                            <div className="defect_fill" style={{ width: `${(d.count / 18) * 100}%` }}></div>
+                                        </div>
+                                        <span className="defect_count">{d.count}</span>
+                                        <span className="defect_pct">{Math.round((d.count / 54) * 100)}%</span>
                                     </div>
                                 ))}
                             </div>

@@ -29,11 +29,17 @@ function Pop() {
   const [modalOpen, setModalOpen] = useState(false)
   const [customMode, setCustomMode] = useState(false)
   const [customReason, setCustomReason] = useState('')
+
+  const [editTarget, setEditTarget] = useState(null)
+  const [editCustomMode, setEditCustomMode] = useState(false)
+  const [editCustomReason, setEditCustomReason] = useState('')
+
   const [docModal, setDocModal] = useState(null)
 
   const lotRef = useRef(null)
   const itemRef = useRef(null)
   const customRef = useRef(null)
+  const editCustomRef = useRef(null)
 
   const remain = total - good - defect
   const rows = logs.filter(
@@ -46,7 +52,7 @@ function Pop() {
   }
 
   function startWork() {
-    if (lotId === '' || itemId === '') {
+    if (lotId.trim() === '' || itemId.trim() === '') {
       notify('로트 ID와 품목 ID를 먼저 입력하세요', 'bad')
       return
     }
@@ -69,6 +75,10 @@ function Pop() {
       notify('작업을 먼저 시작하세요', 'bad')
       return
     }
+    if (lotId.trim() === '' || itemId.trim() === '') {
+      notify('로트 ID와 품목 ID를 입력하세요', 'bad')
+      return
+    }
     setGood((n) => n + 1)
     setLogs((prev) => [
       { key: Date.now(), type: 'good', lotId, itemId, reason: '-', time: formatTime(new Date()) },
@@ -82,6 +92,10 @@ function Pop() {
   function openDefectModal() {
     if (!working) {
       notify('작업을 먼저 시작하세요', 'bad')
+      return
+    }
+    if (lotId.trim() === '' || itemId.trim() === '') {
+      notify('로트 ID와 품목 ID를 입력하세요', 'bad')
       return
     }
     setModalOpen(true)
@@ -107,6 +121,48 @@ function Pop() {
     setTimeout(() => itemRef.current.focus(), 0)
   }
 
+  function openEdit(log) {
+    setEditTarget(log)
+    setEditCustomMode(false)
+    setEditCustomReason('')
+  }
+
+  function closeEdit() {
+    setEditTarget(null)
+    setEditCustomMode(false)
+    setEditCustomReason('')
+  }
+
+  function changeToGood() {
+    if (editTarget.type === 'good') {
+      closeEdit()
+      return
+    }
+    setGood((n) => n + 1)
+    setDefect((n) => n - 1)
+    setLogs((prev) =>
+      prev.map((log) =>
+        log.key === editTarget.key ? { ...log, type: 'good', reason: '-', edited: true } : log
+      )
+    )
+    notify('양품으로 정정했습니다', 'good')
+    closeEdit()
+  }
+
+  function changeToDefect(text) {
+    if (editTarget.type === 'good') {
+      setGood((n) => n - 1)
+      setDefect((n) => n + 1)
+    }
+    setLogs((prev) =>
+      prev.map((log) =>
+        log.key === editTarget.key ? { ...log, type: 'bad', reason: text, edited: true } : log
+      )
+    )
+    notify(`불량으로 정정했습니다 : ${text}`, 'bad')
+    closeEdit()
+  }
+
   function onScanKeyDown(e, isItemField) {
     if (e.key === ' ') {
       e.preventDefault()
@@ -130,6 +186,8 @@ function Pop() {
 
   useEffect(() => {
     function handleKey(e) {
+      if (editTarget) return
+
       if (docModal) {
         if (e.key === 'Escape') setDocModal(null)
         return
@@ -164,7 +222,7 @@ function Pop() {
 
     window.addEventListener('keydown', handleKey)
     return () => window.removeEventListener('keydown', handleKey)
-  }, [modalOpen, docModal, working, itemId, lotId, good, defect, logs])
+  }, [modalOpen, docModal, editTarget, working, itemId, lotId, good, defect, logs])
 
   useEffect(() => {
     if (!modalOpen) return
@@ -204,10 +262,59 @@ function Pop() {
   }, [modalOpen, customMode, customReason, itemId, lotId])
 
   useEffect(() => {
+    if (!editTarget) return
+
+    function handleKey(e) {
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        closeEdit()
+        return
+      }
+
+      if (editCustomMode) {
+        if (e.key === 'Enter') {
+          e.preventDefault()
+          const text = editCustomReason.trim()
+          if (text === '') return
+          changeToDefect(text)
+        }
+        return
+      }
+
+      if (e.key === 'g' || e.key === 'G' || e.key === 'ㅎ') {
+        e.preventDefault()
+        changeToGood()
+        return
+      }
+
+      if (e.key === '0') {
+        e.preventDefault()
+        setEditCustomMode(true)
+        return
+      }
+
+      const num = Number(e.key)
+      if (num >= 1 && num <= defectReasons.length) {
+        e.preventDefault()
+        changeToDefect(defectReasons[num - 1])
+      }
+    }
+
+    window.addEventListener('keydown', handleKey)
+    return () => window.removeEventListener('keydown', handleKey)
+  }, [editTarget, editCustomMode, editCustomReason, good, defect, logs])
+
+  useEffect(() => {
     if (customMode) {
       customRef.current.focus()
     }
   }, [customMode])
+
+  useEffect(() => {
+    if (editCustomMode) {
+      editCustomRef.current.focus()
+    }
+  }, [editCustomMode])
 
   return (
     <div className="pop">
@@ -269,7 +376,7 @@ function Pop() {
             <div className="info_card">
               <div className="info_item">
                 <span className="info_key">품목명</span>
-                <span className="info_val">Super LUKAS</span>
+                <span className="info_val">LUKAS</span>
               </div>
               <div className="info_item">
                 <span className="info_key">공정명</span>
@@ -377,8 +484,19 @@ function Pop() {
                           </span>
                         </td>
                         <td>{log.lotId}</td>
-                        <td>{log.itemId}</td>
-                        <td>{log.reason}</td>
+                        <td>
+                          <button
+                            className="edit_btn"
+                            onClick={() => openEdit(log)}
+                            title="클릭하면 정정할 수 있습니다"
+                          >
+                            {log.itemId}
+                          </button>
+                        </td>
+                        <td>
+                          {log.reason}
+                          {log.edited && <span className="edited_mark">정정</span>}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -403,8 +521,8 @@ function Pop() {
       </div>
 
       {modalOpen && (
-        <div className="modal_bg">
-          <div className="modal">
+        <div className="modal_bg" onClick={closeModal}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
             <h2 className="modal_title">불량 사유 선택</h2>
             <p className="modal_help">숫자 키를 누르면 바로 등록됩니다 · ESC 취소</p>
 
@@ -439,6 +557,50 @@ function Pop() {
         </div>
       )}
 
+      {editTarget && (
+        <div className="modal_bg" onClick={closeEdit}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <h2 className="modal_title">등록 정정</h2>
+            <p className="modal_help">
+              {editTarget.itemId} · 현재 {editTarget.type === 'good' ? '양품' : '불량'} · ESC 취소
+            </p>
+
+            <div className="reason_list">
+              <button className="reason_btn good_btn" onClick={changeToGood}>
+                <span className="reason_num">G</span>
+                <span className="reason_text">양품으로 변경</span>
+              </button>
+
+              {defectReasons.map((r, i) => (
+                <button key={r} className="reason_btn" onClick={() => changeToDefect(r)}>
+                  <span className="reason_num">{i + 1}</span>
+                  <span className="reason_text">불량 · {r}</span>
+                </button>
+              ))}
+
+              <button
+                className={editCustomMode ? 'reason_btn on' : 'reason_btn'}
+                onClick={() => setEditCustomMode(true)}
+              >
+                <span className="reason_num">0</span>
+                <span className="reason_text">불량 · 직접 입력</span>
+              </button>
+            </div>
+
+            {editCustomMode && (
+              <input
+                ref={editCustomRef}
+                className="custom_input"
+                type="text"
+                value={editCustomReason}
+                onChange={(e) => setEditCustomReason(e.target.value)}
+                placeholder="사유 입력 후 Enter"
+              />
+            )}
+          </div>
+        </div>
+      )}
+
       {docModal && (
         <div className="modal_bg" onClick={() => setDocModal(null)}>
           <div className="doc_modal" onClick={(e) => e.stopPropagation()}>
@@ -450,9 +612,9 @@ function Pop() {
                 <table className="doc_table">
                   <tbody>
                     <tr><th>지시번호</th><td>WO-2609-0131</td></tr>
-                    <tr><th>로트 ID</th><td>TEQ2-2609-131</td></tr>
-                    <tr><th>품목명</th><td>Super LUKAS</td></tr>
-                    <tr><th>규격</th><td>T2SL LWIR 1280×1024 / 12㎛</td></tr>
+                    <tr><th>로트 ID</th><td>LKS-2609-131</td></tr>
+                    <tr><th>품목명</th><td>LUKAS</td></tr>
+                    <tr><th>규격</th><td>T2SL LW 640×512 (15㎛)</td></tr>
                     <tr><th>지시수량</th><td>1,800 EA</td></tr>
                     <tr><th>공정</th><td>포장</td></tr>
                     <tr><th>작업시간</th><td>10:00 ~ 20:00</td></tr>
@@ -463,10 +625,10 @@ function Pop() {
                 <div className="doc_note">
                   <strong>작업 유의사항</strong>
                   <ul>
-                    <li>제전장갑을 반드시 착용하고 광학창 접촉을 피할 것</li>
-                    <li>개별 포장 전 방진 클린룸 기준 유지</li>
-                    <li>밀봉 후 실링 상태를 육안 확인할 것</li>
-                    <li>라벨의 로트 ID와 실물 바코드 일치 여부 확인</li>
+                    <li>제전장갑을 착용하고 렌즈면에 직접 손이 닿지 않도록 할 것</li>
+                    <li>포장 전 외관과 렌즈 상태를 육안으로 확인할 것</li>
+                    <li>밀봉 후 포장 상태를 확인할 것</li>
+                    <li>라벨의 로트 ID와 실물 바코드가 일치하는지 확인할 것</li>
                   </ul>
                 </div>
               </>
@@ -481,9 +643,9 @@ function Pop() {
                       <span className="notice_tag urgent">긴급</span>
                       <span className="notice_date">2026-09-13</span>
                     </div>
-                    <p className="notice_title">Line 2 밀봉기 점검 예정</p>
+                    <p className="notice_title">Line 2 포장기 점검 예정</p>
                     <p className="notice_body">
-                      9월 14일 09:00부터 약 2시간 동안 밀봉기 정기 점검이 진행됩니다.
+                      9월 14일 09:00부터 약 2시간 동안 포장기 정기 점검이 진행됩니다.
                       해당 시간에는 포장 공정을 중단해 주십시오.
                     </p>
                   </div>
