@@ -1,0 +1,159 @@
+/* ============================================================
+   MES Dashboard · 디자인 토큰
+   i3system 코퍼레이트 블루(#006cb8) 기준 · 라이트 테마 단일
+   ============================================================ */
+:root {
+  /* 서피스 & 라인 */
+  --bg: #eef1f7;
+  --bg-grad: radial-gradient(1200px 600px at 20% -10%, #ffffff 0%, #eef1f7 60%);
+  --surface: #ffffff;
+  --surface-2: #f6f8fc;
+  --surface-3: #eef2f8;
+  --border: #e4e8f1;
+  --border-strong: #d2d9e6;
+
+  /* 텍스트 */
+  --text-1: #0b1524;
+  --text-2: #4d5a6e;
+  --text-3: #8794a8;
+
+  /* 브랜드 / 시리즈(단일 계열) */
+  --brand: #006cb8;
+  --brand-strong: #005089;
+  --brand-soft: rgba(0, 108, 184, 0.1);
+  --track: #cfe5f6;
+  --track-strong: #8dc0e5; /* 차트 비활성 막대 */
+
+  /* 상태 (고정 · 테마 무관) — 항상 아이콘+라벨과 함께 사용 */
+  --good: #0ca30c;
+  --warning: #fab219;
+  --serious: #ec835a;
+  --critical: #d03b3b;
+  --good-ink: #06750a;
+  --warning-ink: #8a6000;
+  --serious-ink: #a2492a;
+  --critical-ink: #b32d2d;
+  --good-soft: rgba(12, 163, 12, 0.12);
+  --warning-soft: rgba(250, 178, 25, 0.16);
+  --serious-soft: rgba(236, 131, 90, 0.16);
+  --critical-soft: rgba(208, 59, 59, 0.12);
+
+  --shadow-sm: 0 1px 2px rgba(15, 30, 60, 0.06);
+  --shadow-md: 0 6px 18px -8px rgba(15, 30, 60, 0.18), 0 1px 2px rgba(15, 30, 60, 0.05);
+
+  --r-lg: 16px;
+  --r-md: 10px;
+  --r-sm: 6px;
+
+  --sans: 'Pretendard', 'Pretendard Variable', -apple-system, 'Apple SD Gothic Neo',
+    'Malgun Gothic', 'Segoe UI', system-ui, sans-serif;
+
+  color-scheme: light only;
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--text-1);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  background-image: var(--bg-grad);
+  color: var(--text-1);
+}
+
+h1,
+h2,
+h3,
+p,
+figure {
+  margin: 0;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* 스크롤바 */
+.scroll-y {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+.scroll-y::-webkit-scrollbar {
+  width: 8px;
+}
+.scroll-y::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 8px;
+}
+.scroll-y::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* 공통 카드 */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 18px 12px;
+}
+
+.card__title {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text-1);
+}
+
+.card__sub {
+  font-size: 12px;
+  color: var(--text-3);
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}

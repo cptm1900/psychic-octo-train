@@ -1,0 +1,180 @@
+/* ---------- 상태 칩: 색 + 아이콘 + 라벨 (색 단독으로 의미 전달하지 않음) ---------- */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px 3px 7px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.5;
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+.chip__icon {
+  flex: none;
+}
+.chip--good {
+  background: var(--good-soft);
+  color: var(--good-ink);
+  border-color: color-mix(in srgb, var(--good) 30%, transparent);
+}
+.chip--warning {
+  background: var(--warning-soft);
+  color: var(--warning-ink);
+  border-color: color-mix(in srgb, var(--warning) 40%, transparent);
+}
+.chip--serious {
+  background: var(--serious-soft);
+  color: var(--serious-ink);
+  border-color: color-mix(in srgb, var(--serious) 40%, transparent);
+}
+.chip--critical {
+  background: var(--critical-soft);
+  color: var(--critical-ink);
+  border-color: color-mix(in srgb, var(--critical) 35%, transparent);
+}
+.chip--info {
+  background: var(--brand-soft);
+  color: var(--brand-strong);
+  border-color: color-mix(in srgb, var(--brand) 30%, transparent);
+}
+.chip--muted {
+  background: var(--surface-3);
+  color: var(--text-3);
+  border-color: var(--border);
+}
+.chip--sm {
+  padding: 2px 8px 2px 6px;
+  font-size: 11px;
+}
+
+/* 가동중 상태의 맥박 */
+.chip--good .chip__pulse {
+  animation: chip-pulse 1.8s ease-in-out infinite;
+  transform-origin: center;
+}
+@keyframes chip-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .chip--good .chip__pulse {
+    animation: none;
+  }
+}
+
+/* ---------- 미터 ---------- */
+.meter {
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+.meter__label {
+  font-size: 13px;
+  color: var(--text-2);
+  font-weight: 500;
+}
+.meter__track {
+  position: relative;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--track);
+  overflow: hidden;
+}
+.meter__fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 999px;
+  background: var(--brand);
+  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.meter--warning .meter__track {
+  background: var(--warning-soft);
+}
+.meter--warning .meter__fill {
+  background: var(--warning);
+}
+.meter--critical .meter__track {
+  background: var(--critical-soft);
+}
+.meter--critical .meter__fill {
+  background: var(--critical);
+}
+/* 진행률과 경쟁하지 않도록 보조 지표는 중립색으로 */
+.meter--muted .meter__track {
+  background: var(--surface-3);
+}
+.meter--muted .meter__fill {
+  background: var(--border-strong);
+}
+.meter__value {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-1);
+  font-variant-numeric: tabular-nums;
+  min-width: 74px;
+  text-align: right;
+}
+.meter__value small {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-3);
+  margin-left: 3px;
+}
+
+/* ---------- 링 게이지 ---------- */
+.ring {
+  position: relative;
+  flex: none;
+  display: grid;
+  place-items: center;
+}
+.ring svg {
+  transform: rotate(-90deg);
+}
+.ring__track {
+  stroke: var(--track);
+}
+.ring__fill {
+  stroke: var(--brand);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ring--warning .ring__fill {
+  stroke: var(--warning);
+}
+.ring--warning .ring__track {
+  stroke: var(--warning-soft);
+}
+.ring--critical .ring__fill {
+  stroke: var(--critical);
+}
+.ring--critical .ring__track {
+  stroke: var(--critical-soft);
+}
+.ring__center {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  text-align: center;
+}
+.ring__value {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-1);
+  line-height: 1.1;
+}
+.ring__caption {
+  font-size: 11px;
+  color: var(--text-3);
+  margin-top: 2px;
+}
