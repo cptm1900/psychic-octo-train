@@ -121,3 +121,31 @@
         font-size: 24px;
     }
 }
+
+.home_bottom {
+    width: 100%;
+    max-width: 900px;
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.home_github {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 40px;
+    padding: 10px 20px;
+    border: 1px solid #e4e8f1;
+    border-radius: 999px;
+    background: #fff;
+    font-size: 14px;
+    color: #4d5a6e;
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+}
+
+.home_github:hover {
+    border-color: #006cb8;
+    color: #006cb8;
+}

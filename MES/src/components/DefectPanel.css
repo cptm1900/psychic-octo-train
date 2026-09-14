@@ -1,5 +1,0 @@
-/* Chart.js 캔버스 영역 — 높이는 항목 수에 맞춰 컴포넌트에서 계산한다. */
-.defect__plot {
-  position: relative;
-  padding: 0 18px 16px;
-}
