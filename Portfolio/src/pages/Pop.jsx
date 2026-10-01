@@ -344,7 +344,7 @@ function Pop() {
     <div className="pop">
       <div className="pop_head">
         <div className="pop_logo_wrap">
-          <button className="logo_btn" onClick={() => navigate('/')} title="메인 화면으로 이동">
+          <button className="logo_btn" onClick={() => navigate('/mes')} title="메인 화면으로 이동">
             <img className="pop_logo" src="/i3system_logo.gif" alt="아이쓰리시스템" />
           </button>
         </div>

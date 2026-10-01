@@ -1,0 +1,100 @@
+html { overflow-y: scroll; }
+	#about_container {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		background: url(../img/photo-1463171379579-3fdfb86d6285.jpg) no-repeat fixed center top;
+		z-index: 0;
+	}
+		#about_container>.bg_box {
+			display: none;
+			width: 100%;
+			height: 100%;
+			background: #000;
+		}
+		#about_container>.about_title {
+			position: absolute;
+			width: 100%;
+			top: 200px;
+			font-size: 70px;
+			font-weight: 700;
+			color: #fff;
+			text-align: center;
+		}
+	#about_wrap {
+		position: absolute;
+		top: 330px;
+		left: 50%;
+		margin-left: -480px;
+		width: 960px;
+		padding-bottom: 80px;
+		color: #eee;
+		font-family: "Malgun Gothic", "Verdana", sans-serif;
+	}
+
+	/* 사진 + 이름 */
+		#about_wrap>#about_profile {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+			#about_wrap>#about_profile>.about_picture>img {
+				width: 180px;
+				border: 3px solid #fff;
+			}
+			#about_wrap>#about_profile>.about_name_box {
+				margin-left: 40px;
+			}
+				.about_name_box>.about_name {
+					font-size: 40px;
+					font-weight: 700;
+				}
+				.about_name_box>.about_name_en {
+					font-size: 20px;
+					font-style: italic;
+					color: #9cc8f0;
+				}
+				.about_name_box>.about_mail {
+					margin-top: 10px;
+					font-size: 17px;
+				}
+
+	/* EDUCATION, CERTIFICATION, SKILLS */
+		#about_wrap>#about_info {
+			display: flex;
+			justify-content: space-between;
+			margin-top: 50px;
+		}
+			#about_info>.info_box {
+				width: 300px;
+			}
+				.info_box>.info_title {
+					margin: 0 0 12px 0;
+					font-size: 26px;
+					font-weight: 700;
+					letter-spacing: 1px;
+				}
+				.info_box>ul {
+					margin-bottom: 30px;
+				}
+					.info_box>ul>li {
+						margin-bottom: 8px;
+						padding-left: 10px;
+						border-left: 5px solid #2a8fd0;
+						font-size: 17px;
+					}
+				.info_box>.skill_list>span {
+					display: inline-block;
+					margin: 0 6px 10px 0;
+					padding: 5px 12px;
+					border: 1px solid #eee;
+					border-radius: 3px;
+					font-size: 16px;
+				}
+	#contents {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		background: #fff;
+		z-index: 1;
+	}

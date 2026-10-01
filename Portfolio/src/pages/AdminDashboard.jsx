@@ -28,7 +28,7 @@ function AdminDashboard() {
             <div className="dash">
                 <div className="dash_head">
                     <div className="dash_logo_wrap">
-                        <button className="logo_btn" onClick={()=>navigate('/')} title="메인화면으로 이동" >
+                        <button className="logo_btn" onClick={()=>navigate('/mes')} title="메인화면으로 이동" >
                             <img className="dash_logo" src="/i3system_logo.gif" alt="i3system logo" />
                         </button>
                     </div>

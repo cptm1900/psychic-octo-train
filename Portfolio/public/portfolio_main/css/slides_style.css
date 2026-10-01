@@ -1,0 +1,65 @@
+	#wrap2 {
+		width: 100%;
+		height: 100%;
+		background: #222;
+	}
+	#slides_container {
+		position: absolute;
+		top: 65px;
+		width: 100%;
+		text-align: center;
+	}
+		/* 화면 높이에서 메뉴(65px) + 버튼 영역(85px)을 뺀 만큼 최대한 크게 */
+		#slides_container>.slide_img>img {
+			max-width: 98%;
+			max-height: calc(100vh - 150px);
+			box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+			cursor: pointer;
+		}
+		#slides_container>#slide_control {
+			margin-top: 12px;
+			color: #eee;
+		}
+			#slide_control>a {
+				display: inline-block;
+				width: 40px;
+				height: 40px;
+				line-height: 38px;
+				border: 1px solid #aaa;
+				border-radius: 50%;
+				color: #eee;
+				font-size: 18px;
+				vertical-align: middle;
+			}
+			#slide_control>a:hover {
+				background: #fff;
+				color: #222;
+			}
+			#slide_control>.slide_full {
+				width: auto;
+				margin-left: 20px;
+				padding: 0 15px;
+				border-radius: 20px;
+				font-family: "Malgun Gothic", sans-serif;
+				font-size: 14px;
+			}
+			#slide_control>.slide_page {
+				display: inline-block;
+				width: 100px;
+				font-family: "Verdana", sans-serif;
+				font-size: 17px;
+				vertical-align: middle;
+			}
+		#slides_container>.slide_help {
+			margin-top: 6px;
+			font-family: "Malgun Gothic", sans-serif;
+			font-size: 13px;
+			color: #888;
+		}
+	#contents {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		background: #fff;
+		z-index: 1;
+	}

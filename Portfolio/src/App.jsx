@@ -10,7 +10,7 @@ import './App.css'
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Landing />} />
+      <Route path="/mes" element={<Landing />} />
       <Route path="/admin" element={<AdminDashboard />} />
       <Route path="/pop" element={<Pop />} />
     </Routes>
