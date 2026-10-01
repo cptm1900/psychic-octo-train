@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useNow, formatDate, formatTime, weekday } from '../hooks/useNow'
+import { selectResultList, createResult, updateResult } from '../api/resultApi'
 import './Pop.css'
 
 const defectReasons = [
@@ -20,9 +21,7 @@ function Pop() {
   const [itemId, setItemId] = useState('')
   const [working, setWorking] = useState(false)
   const [total] = useState(1800)
-  const [good, setGood] = useState(0)
-  const [defect, setDefect] = useState(0)
-  const [logs, setLogs] = useState([])
+  const [results, setResults] = useState([])
   const [query, setQuery] = useState('')
   const [message, setMessage] = useState(null)
 
@@ -40,11 +39,24 @@ function Pop() {
   const itemRef = useRef(null)
   const customRef = useRef(null)
   const editCustomRef = useRef(null)
+  const savingRef = useRef(false)   // 서버 응답 기다리는 중인지
 
+  // 현재 작업 중인 로트의 실적만 골라서 수량 계산
+  const lotResults = working ? results.filter((result) => result.lotId === lotId) : []
+  const good = lotResults.filter((result) => result.resultType === 'OK').length
+  const defect = lotResults.length - good
   const remain = total - good - defect
-  const rows = logs.filter(
-    (log) => query === '' || log.itemId.includes(query) || log.lotId.includes(query)
+
+  const rows = results.filter(
+    (result) => query === '' || result.itemId.includes(query) || result.lotId.includes(query)
   )
+
+  // 화면이 처음 열릴 때 서버에서 등록 이력 불러오기
+  useEffect(() => {
+    selectResultList()
+      .then((data) => setResults(data))
+      .catch((err) => notify(err.message, 'bad'))
+  }, [])
 
   function notify(text, type) {
     setMessage({ text, type })
@@ -64,10 +76,31 @@ function Pop() {
     setWorking(false)
     setLotId('')
     setItemId('')
-    setGood(0)
-    setDefect(0)
     notify('로트를 종료했습니다', 'good')
     setTimeout(() => lotRef.current.focus(), 0)
+  }
+
+  // 서버에 실적 등록
+  async function save(resultType, reason) {
+    if (savingRef.current) return   // 이전 요청이 아직 안 끝났으면 무시
+    savingRef.current = true
+
+    try {
+      const saved = await createResult({ lotId, itemId, resultType, reason })
+      setResults((prev) => [saved, ...prev])
+
+      if (resultType === 'OK') {
+        notify('양품 등록 완료', 'good')
+      } else {
+        notify(`불량 등록 : ${reason}`, 'bad')
+      }
+      setItemId('')
+    } catch (err) {
+      notify(err.message, 'bad')
+    } finally {
+      savingRef.current = false
+      setTimeout(() => itemRef.current.focus(), 0)
+    }
   }
 
   function addGood() {
@@ -79,14 +112,7 @@ function Pop() {
       notify('로트 ID와 품목 ID를 입력하세요', 'bad')
       return
     }
-    setGood((n) => n + 1)
-    setLogs((prev) => [
-      { key: Date.now(), type: 'good', lotId, itemId, reason: '-', time: formatTime(new Date()) },
-      ...prev,
-    ])
-    notify('양품 등록 완료', 'good')
-    setItemId('')
-    setTimeout(() => itemRef.current.focus(), 0)
+    save('OK', null)
   }
 
   function openDefectModal() {
@@ -110,19 +136,12 @@ function Pop() {
   }
 
   function registerDefect(text) {
-    setDefect((n) => n + 1)
-    setLogs((prev) => [
-      { key: Date.now(), type: 'bad', lotId, itemId, reason: text, time: formatTime(new Date()) },
-      ...prev,
-    ])
-    notify(`불량 등록 : ${text}`, 'bad')
     closeModal()
-    setItemId('')
-    setTimeout(() => itemRef.current.focus(), 0)
+    save('NG', text)
   }
 
-  function openEdit(log) {
-    setEditTarget(log)
+  function openEdit(result) {
+    setEditTarget(result)
     setEditCustomMode(false)
     setEditCustomReason('')
   }
@@ -133,34 +152,39 @@ function Pop() {
     setEditCustomReason('')
   }
 
-  function changeToGood() {
-    if (editTarget.type === 'good') {
+  // 서버에 정정 요청
+  async function changeResult(resultType, reason) {
+    // 이미 양품인 걸 양품으로 바꾸면 할 게 없음
+    if (editTarget.resultType === 'OK' && resultType === 'OK') {
       closeEdit()
       return
     }
-    setGood((n) => n + 1)
-    setDefect((n) => n - 1)
-    setLogs((prev) =>
-      prev.map((log) =>
-        log.key === editTarget.key ? { ...log, type: 'good', reason: '-', edited: true } : log
+
+    try {
+      const saved = await updateResult(editTarget.resultId, { resultType, reason })
+      setResults((prev) =>
+        prev.map((result) => (result.resultId === saved.resultId ? saved : result))
       )
-    )
-    notify('양품으로 정정했습니다', 'good')
-    closeEdit()
+
+      if (resultType === 'OK') {
+        notify('양품으로 정정했습니다', 'good')
+      } else {
+        notify(`불량으로 정정했습니다 : ${reason}`, 'bad')
+      }
+    } catch (err) {
+      notify(err.message, 'bad')
+    } finally {
+      closeEdit()
+      setTimeout(() => itemRef.current.focus(), 0)
+    }
+  }
+
+  function changeToGood() {
+    changeResult('OK', null)
   }
 
   function changeToDefect(text) {
-    if (editTarget.type === 'good') {
-      setGood((n) => n - 1)
-      setDefect((n) => n + 1)
-    }
-    setLogs((prev) =>
-      prev.map((log) =>
-        log.key === editTarget.key ? { ...log, type: 'bad', reason: text, edited: true } : log
-      )
-    )
-    notify(`불량으로 정정했습니다 : ${text}`, 'bad')
-    closeEdit()
+    changeResult('NG', text)
   }
 
   function onScanKeyDown(e, isItemField) {
@@ -222,7 +246,7 @@ function Pop() {
 
     window.addEventListener('keydown', handleKey)
     return () => window.removeEventListener('keydown', handleKey)
-  }, [modalOpen, docModal, editTarget, working, itemId, lotId, good, defect, logs])
+  }, [modalOpen, docModal, editTarget, working, itemId, lotId, good, defect, results])
 
   useEffect(() => {
     if (!modalOpen) return
@@ -302,7 +326,7 @@ function Pop() {
 
     window.addEventListener('keydown', handleKey)
     return () => window.removeEventListener('keydown', handleKey)
-  }, [editTarget, editCustomMode, editCustomReason, good, defect, logs])
+  }, [editTarget, editCustomMode, editCustomReason, good, defect, results])
 
   useEffect(() => {
     if (customMode) {
@@ -475,27 +499,27 @@ function Pop() {
                     </tr>
                   </thead>
                   <tbody>
-                    {rows.map((log) => (
-                      <tr key={log.key}>
-                        <td>{log.time}</td>
+                    {rows.map((result) => (
+                      <tr key={result.resultId}>
+                        <td>{result.regDt.slice(11, 19)}</td>
                         <td>
-                          <span className={`log_chip ${log.type}`}>
-                            {log.type === 'good' ? '양품' : '불량'}
+                          <span className={result.resultType === 'OK' ? 'log_chip good' : 'log_chip bad'}>
+                            {result.resultType === 'OK' ? '양품' : '불량'}
                           </span>
                         </td>
-                        <td>{log.lotId}</td>
+                        <td>{result.lotId}</td>
                         <td>
                           <button
                             className="edit_btn"
-                            onClick={() => openEdit(log)}
+                            onClick={() => openEdit(result)}
                             title="클릭하면 정정할 수 있습니다"
                           >
-                            {log.itemId}
+                            {result.itemId}
                           </button>
                         </td>
                         <td>
-                          {log.reason}
-                          {log.edited && <span className="edited_mark">정정</span>}
+                          {result.reason || '-'}
+                          {result.editedYn === 'Y' && <span className="edited_mark">정정</span>}
                         </td>
                       </tr>
                     ))}
@@ -562,7 +586,7 @@ function Pop() {
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <h2 className="modal_title">등록 정정</h2>
             <p className="modal_help">
-              {editTarget.itemId} · 현재 {editTarget.type === 'good' ? '양품' : '불량'} · ESC 취소
+              {editTarget.itemId} · 현재 {editTarget.resultType === 'OK' ? '양품' : '불량'} · ESC 취소
             </p>
 
             <div className="reason_list">
